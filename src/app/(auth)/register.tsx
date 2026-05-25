@@ -1,4 +1,5 @@
 import {Image} from 'expo-image';
+import { Link } from 'expo-router';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {InputField} from "@/components/InputField";
 import {AntDesign, Feather, FontAwesome5} from "@expo/vector-icons";
@@ -310,6 +311,15 @@ export default function RegisterScreen() {
                         </Text>
                     </View>
                 ) : null}
+
+                <View className="mt-5 flex-row items-center justify-center">
+                    <Text className="text-[13px] text-text-muted">Sudah punya akun? </Text>
+                    <Link href="/login" asChild>
+                        <Pressable hitSlop={6}>
+                            <Text className="text-[13px] font-semibold text-primary">Login</Text>
+                        </Pressable>
+                    </Link>
+                </View>
             </ScrollView>
         </View>
     );
