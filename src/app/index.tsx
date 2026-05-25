@@ -28,12 +28,12 @@ export default function WelcomeScreen() {
               </Text>
 
               <Text className="mt-2 max-w-[340px] text-center text-[26px] font-bold leading-[33px] text-text">
-                Peminjaman Barang Laboratorium
+                Peminjaman Barang
+                <Text className={"text-primary ml-0.5"}>
+                  Laboratorium
+                </Text>
               </Text>
 
-              <Text className="mt-3 max-w-[310px] text-center text-[13px] leading-5 text-text-muted">
-                Ajukan peminjaman, pantau status, dan kelola kebutuhan barang kampus dari satu aplikasi.
-              </Text>
             </View>
 
             <View className="mt-6 items-center">
