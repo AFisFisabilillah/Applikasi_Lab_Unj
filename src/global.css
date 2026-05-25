@@ -13,3 +13,47 @@
   --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
   --font-serif: Georgia, 'Times New Roman', serif;
 }
+@theme{
+  --color-primary: #006569;
+  --color-primary-dark: #006569;
+  --color-secondary: #0c8388;
+  --color-thirdth: #FFE07F;
+  --color-background: #f7fbf7;
+}
+
+@theme {
+
+  --color-primary: #006569;
+  --color-primary-dark: #006569;
+  --color-secondary: #0c8388;
+  --color-thirdth: #FFE07F;
+  --color-background: #f7fbf7;
+  --color-primary-foreground: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f9f8;
+  --color-border: #c6d0c8;
+  --color-input: #c4cec7;
+  --color-text: #102216;
+  --color-text-muted: #6e7d72;
+  --color-placeholder: #aab4ad;
+  --color-accent: #dfe91f;
+  --color-accent-foreground: #1f3a10;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #3ecf74;
+    --color-primary-foreground: #08130c;
+    --color-secondary: #132018;
+    --color-background: #09110c;
+    --color-surface: #111b15;
+    --color-surface-muted: #15221a;
+    --color-border: #233429;
+    --color-input: #2a3a31;
+    --color-text: #f2f5f2;
+    --color-text-muted: #a1afa6;
+    --color-placeholder: #728177;
+    --color-accent: #dfe91f;
+    --color-accent-foreground: #16210d;
+  }
+}
