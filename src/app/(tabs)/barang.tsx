@@ -4,8 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 
 import { BarangCard } from '@/components/BarangCard';
+import { BarangDetailSheet } from '@/components/BarangDetailSheet';
 import { clearBarangError, fetchBarang } from '@/slice/barangSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import type { Barang } from '@/types/Barang';
 
 const INITIAL_PAGE_SIZE = 10;
 
@@ -15,6 +17,7 @@ export default function BarangScreen() {
 
   const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedBarang, setSelectedBarang] = useState<Barang | null>(null);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -53,7 +56,7 @@ export default function BarangScreen() {
   }, [isLoading, isLoadingMore, loadBarang, meta, searchQuery]);
 
   const renderItem = useCallback(({ item }: { item: (typeof items)[number] }) => {
-    return <BarangCard barang={item} />;
+    return <BarangCard barang={item} onPress={() => setSelectedBarang(item)} />;
   }, []);
 
   const listEmptyComponent = useMemo(() => {
@@ -151,6 +154,12 @@ export default function BarangScreen() {
           <ActivityIndicator size="large" color="#006569" />
         </View>
       ) : null}
+
+      <BarangDetailSheet
+        barang={selectedBarang}
+        visible={selectedBarang !== null}
+        onClose={() => setSelectedBarang(null)}
+      />
     </SafeAreaView>
   );
 }

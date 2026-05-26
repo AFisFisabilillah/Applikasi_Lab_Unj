@@ -1,9 +1,11 @@
 import '@/global.css';
 
 import { useEffect } from 'react';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 
 import { hydrateAuth } from '@/slice/authSlice';
@@ -38,8 +40,12 @@ function AppNavigator() {
 
 export default function RootLayout() {
   return (
-    <Provider store={store}>
-      <AppNavigator />
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <BottomSheetModalProvider>
+          <AppNavigator />
+        </BottomSheetModalProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }

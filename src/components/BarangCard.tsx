@@ -1,17 +1,21 @@
 import { memo } from 'react';
 import { Image } from 'expo-image';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import type { Barang } from '@/types/Barang';
 
 type BarangCardProps = {
   barang: Barang;
+  onPress?: () => void;
 };
 
-function BarangCardComponent({ barang }: BarangCardProps) {
+function BarangCardComponent({ barang, onPress }: BarangCardProps) {
   return (
-    <View className="rounded-2xl border border-border/70 bg-surface px-4 py-4 shadow-sm">
+    <Pressable
+      onPress={onPress}
+      className="rounded-2xl border border-border/70 bg-surface px-4 py-4 shadow-sm active:opacity-95"
+    >
       <View className="flex-row gap-4">
         <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-xl bg-surface-muted">
           {barang.gambar_url ? (
@@ -68,7 +72,7 @@ function BarangCardComponent({ barang }: BarangCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
