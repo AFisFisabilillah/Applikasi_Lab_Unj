@@ -1,11 +1,20 @@
 import '@/global.css';
 
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
+import { Provider } from 'react-redux';
 
-export default function RootLayout() {
+import { hydrateAuth } from '@/slice/authSlice';
+import { store } from '@/store';
+
+function AppNavigator() {
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    store.dispatch(hydrateAuth());
+  }, []);
 
   return (
     <>
@@ -19,9 +28,18 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(auth)/register" />
         <Stack.Screen name="(auth)/login" />
       </Stack>
     </>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
   );
 }

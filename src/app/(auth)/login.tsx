@@ -1,15 +1,17 @@
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 
 import { InputField } from '@/components/InputField';
+import { clearAuthError, clearAuthMessage, loginUser } from '@/slice/authSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 const LOGO_UNJ = require('../../../assets/images/logo_unj.svg');
 
 type LoginForm = {
-    email: string;
+    identityNumber: string;
     password: string;
 };
 
@@ -18,20 +20,34 @@ type LoginFormErrors = Partial<Record<keyof LoginForm, string>> & {
 };
 
 const initialForm: LoginForm = {
-    email: '',
+    identityNumber: '',
     password: '',
 };
 
 export default function LoginScreen() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const { error: authError, isAuthenticated, isLoading, currentAction } = useAppSelector(
+        (state) => state.auth
+    );
     const [form, setForm] = useState<LoginForm>(initialForm);
     const [errors, setErrors] = useState<LoginFormErrors>({});
-    const [submitPreview, setSubmitPreview] = useState<LoginForm | null>(null);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.replace('/(tabs)');
+        }
+    }, [isAuthenticated, router]);
 
     function updateForm<K extends keyof LoginForm>(field: K, value: LoginForm[K]) {
         setForm((current) => ({
             ...current,
             [field]: value,
         }));
+
+        if (authError) {
+            dispatch(clearAuthError());
+        }
 
         setErrors((current) => {
             if (!current[field] && !current.form) return current;
@@ -46,14 +62,12 @@ export default function LoginScreen() {
 
     function validateLoginForm(values: LoginForm): LoginFormErrors {
         const nextErrors: LoginFormErrors = {};
-        const normalizedEmail = values.email.trim().toLowerCase();
+        const normalizedIdentityNumber = values.identityNumber.trim();
         let hasMissingRequiredField = false;
 
-        if (!normalizedEmail) {
-            nextErrors.email = 'Email universitas wajib diisi.';
+        if (!normalizedIdentityNumber) {
+            nextErrors.identityNumber = 'NIP / NIM wajib diisi.';
             hasMissingRequiredField = true;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-            nextErrors.email = 'Format email tidak valid.';
         }
 
         if (!values.password.trim()) {
@@ -63,31 +77,35 @@ export default function LoginScreen() {
 
         if (Object.keys(nextErrors).length > 0) {
             nextErrors.form = hasMissingRequiredField
-                ? 'Lengkapi email dan password sebelum login.'
+                ? 'Lengkapi NIP / NIM dan password sebelum login.'
                 : 'Periksa kembali data login Anda.';
         }
 
         return nextErrors;
     }
 
-    function handleLoginPress() {
+    async function handleLoginPress() {
         const validationErrors = validateLoginForm(form);
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-            setSubmitPreview(null);
             return;
         }
 
-        const payload: LoginForm = {
-            email: form.email.trim().toLowerCase(),
-            password: form.password,
-        };
-
         setErrors({});
-        setSubmitPreview(payload);
-        console.log('Login payload ready:', payload);
+        dispatch(clearAuthError());
+        dispatch(clearAuthMessage());
+
+        await dispatch(
+            loginUser({
+                nim_nip: form.identityNumber.trim(),
+                password: form.password,
+                device_name: 'Expo App',
+            })
+        );
     }
+
+    const formError = errors.form ?? authError;
 
     return (
         <View className="flex-1 bg-background">
@@ -115,21 +133,20 @@ export default function LoginScreen() {
                 </View>
 
                 <View className="mt-6 gap-3.5">
-                    {errors.form ? (
+                    {formError ? (
                         <View className="rounded-[10px] border border-red-200 bg-red-50 px-3 py-2.5">
-                            <Text className="text-[12px] font-medium text-red-500">{errors.form}</Text>
+                            <Text className="text-[12px] font-medium text-red-500">{formError}</Text>
                         </View>
                     ) : null}
 
                     <InputField
-                        label="Email Universitas"
-                        placeholder="nama@mhs.unj.ac.id"
-                        value={form.email}
-                        onChangeText={(value) => updateForm('email', value)}
+                        label="NIP / NIM"
+                        placeholder="Masukkan NIP atau NIM"
+                        value={form.identityNumber}
+                        onChangeText={(value) => updateForm('identityNumber', value)}
                         icon={<FontAwesome5 name="school" size={20} color="rgba(0,0,0,.5)" />}
-                        keyboardType="email-address"
                         autoCapitalize="none"
-                        error={errors.email}
+                        error={errors.identityNumber}
                     />
 
                     <InputField
@@ -145,21 +162,18 @@ export default function LoginScreen() {
 
                 <Pressable
                     onPress={handleLoginPress}
-                    className="mt-5 h-12 items-center justify-center rounded-xl bg-primary active:opacity-90"
+                    disabled={isLoading && currentAction === 'login'}
+                    className="mt-5 h-12 items-center justify-center rounded-xl bg-primary active:opacity-90 disabled:opacity-60"
                 >
                     <View className="flex-row items-center gap-2">
-                        <Text className="text-[15px] font-semibold text-primary-foreground">Login</Text>
-                        <Text className="text-[16px] font-semibold text-primary-foreground">→</Text>
+                        <Text className="text-[15px] font-semibold text-primary-foreground">
+                            {isLoading && currentAction === 'login' ? 'Memproses...' : 'Login'}
+                        </Text>
+                        {!(isLoading && currentAction === 'login') ? (
+                            <Text className="text-[16px] font-semibold text-primary-foreground">→</Text>
+                        ) : null}
                     </View>
                 </Pressable>
-
-                {submitPreview ? (
-                    <View className="mt-3 rounded-[10px] border border-emerald-200 bg-emerald-50 px-3 py-2.5">
-                        <Text className="text-[12px] font-medium text-emerald-700">
-                            Data login siap dikirim ke API.
-                        </Text>
-                    </View>
-                ) : null}
 
                 <View className="mt-5 flex-row items-center justify-center">
                     <Text className="text-[13px] text-text-muted">Belum punya akun? </Text>

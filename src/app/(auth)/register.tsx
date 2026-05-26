@@ -1,9 +1,11 @@
 import {Image} from 'expo-image';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {InputField} from "@/components/InputField";
 import {AntDesign, Feather, FontAwesome5} from "@expo/vector-icons";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+import { clearAuthError, clearAuthMessage, registerUser } from '@/slice/authSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {fakultasData} from "@/types/FakultasItem";
 import {Dropdown} from "react-native-element-dropdown";
 
@@ -52,9 +54,19 @@ const initialForm: RegisterForm = {
 };
 
 export default function RegisterScreen() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const { error: authError, isAuthenticated, isLoading, currentAction } = useAppSelector(
+        (state) => state.auth
+    );
     const [form, setForm] = useState<RegisterForm>(initialForm);
     const [errors, setErrors] = useState<RegisterFormErrors>({});
-    const [submitPreview, setSubmitPreview] = useState<RegisterForm | null>(null);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.replace('/(tabs)');
+        }
+    }, [isAuthenticated, router]);
 
     const prodiData = useMemo(() => {
         const selectedFakultas = fakultasData.find(
@@ -74,6 +86,10 @@ export default function RegisterScreen() {
             ...current,
             [field]: value,
         }));
+
+        if (authError) {
+            dispatch(clearAuthError());
+        }
 
         setErrors((current) => {
             if (!current[field] && !current.form) return current;
@@ -101,14 +117,14 @@ export default function RegisterScreen() {
             hasMissingRequiredField = true;
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
             nextErrors.email = 'Format email tidak valid.';
-        } else if (mockedDuplicateValues.emails.includes(normalizedEmail)) {
+        } else if (mockedDuplicateValues.emails.some((email) => email === normalizedEmail)) {
             nextErrors.email = duplicateRegisterErrorSchema.email;
         }
 
         if (!normalizedIdentityNumber) {
             nextErrors.identityNumber = registerRequiredFieldErrorSchema.identityNumber;
             hasMissingRequiredField = true;
-        } else if (mockedDuplicateValues.identityNumbers.includes(normalizedIdentityNumber)) {
+        } else if (mockedDuplicateValues.identityNumbers.some((value) => value === normalizedIdentityNumber)) {
             nextErrors.identityNumber = duplicateRegisterErrorSchema.identityNumber;
         }
 
@@ -134,28 +150,31 @@ export default function RegisterScreen() {
         return nextErrors;
     }
 
-    function handleRegisterPress() {
+    async function handleRegisterPress() {
         const validationErrors = validateRegisterForm(form);
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-            setSubmitPreview(null);
             return;
         }
 
-        const payload: RegisterForm = {
-            fullName: form.fullName.trim(),
-            email: form.email.trim().toLowerCase(),
-            identityNumber: form.identityNumber.trim(),
-            fakultas: form.fakultas,
-            prodi: form.prodi,
-            password: form.password,
-        };
-
         setErrors({});
-        setSubmitPreview(payload);
-        console.log('Register payload ready:', payload);
+        dispatch(clearAuthError());
+        dispatch(clearAuthMessage());
+
+        await dispatch(
+            registerUser({
+                nama: form.fullName.trim(),
+                email: form.email.trim().toLowerCase(),
+                nim_nip: form.identityNumber.trim(),
+                fakultas: form.fakultas ?? '',
+                prodi: form.prodi ?? '',
+                password: form.password,
+            })
+        );
     }
+
+    const formError = errors.form ?? authError;
 
 
     return (
@@ -185,9 +204,9 @@ export default function RegisterScreen() {
                 </View>
 
                 <View className="mt-6 gap-3.5">
-                    {errors.form ? (
+                    {formError ? (
                         <View className="rounded-[10px] border border-red-200 bg-red-50 px-3 py-2.5">
-                            <Text className="text-[12px] font-medium text-red-500">{errors.form}</Text>
+                            <Text className="text-[12px] font-medium text-red-500">{formError}</Text>
                         </View>
                     ) : null}
 
@@ -296,21 +315,18 @@ export default function RegisterScreen() {
 
                 <Pressable
                     onPress={handleRegisterPress}
-                    className="mt-5 h-12 items-center justify-center rounded-xl bg-primary active:opacity-90"
+                    disabled={isLoading && currentAction === 'register'}
+                    className="mt-5 h-12 items-center justify-center rounded-xl bg-primary active:opacity-90 disabled:opacity-60"
                 >
                     <View className="flex-row items-center gap-2">
-                        <Text className="text-[15px] font-semibold text-primary-foreground">Daftar</Text>
-                        <Text className="text-[16px] font-semibold text-primary-foreground">→</Text>
+                        <Text className="text-[15px] font-semibold text-primary-foreground">
+                            {isLoading && currentAction === 'register' ? 'Memproses...' : 'Daftar'}
+                        </Text>
+                        {!(isLoading && currentAction === 'register') ? (
+                            <Text className="text-[16px] font-semibold text-primary-foreground">→</Text>
+                        ) : null}
                     </View>
                 </Pressable>
-
-                {submitPreview ? (
-                    <View className="mt-3 rounded-[10px] border border-emerald-200 bg-emerald-50 px-3 py-2.5">
-                        <Text className="text-[12px] font-medium text-emerald-700">
-                            Data registrasi siap dikirim ke API.
-                        </Text>
-                    </View>
-                ) : null}
 
                 <View className="mt-5 flex-row items-center justify-center">
                     <Text className="text-[13px] text-text-muted">Sudah punya akun? </Text>

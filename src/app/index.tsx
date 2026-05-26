@@ -1,18 +1,29 @@
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
+
+import { useAppSelector } from '@/store/hooks';
 
 const LOGO_UNJ = require('../../assets/images/logo_unj.svg');
 const WELCOME_IMAGE = require('../../assets/welcome_image.svg');
 
 export default function WelcomeScreen() {
+  const router = useRouter();
+  const { isAuthenticated, isHydrated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isHydrated && isAuthenticated) {
+      router.replace('/(tabs)');
+    }
+  }, [isAuthenticated, isHydrated, router]);
+
   return (
       <View className="relative flex-1 bg-background">
         <SafeAreaView edges={['top']} className="flex-1">
           <ScrollView
               showsVerticalScrollIndicator={false}
-              contentContainerClassName="px-5 pt-4 pb-[280px]"
           >
             <View className="items-center">
               <View className="h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm">
