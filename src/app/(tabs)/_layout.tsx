@@ -1,7 +1,20 @@
+import { useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+
+import { useAppSelector } from '@/store/hooks';
 
 export default function TabsLayout() {
+  const router = useRouter();
+  const { isAuthenticated, isHydrated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isHydrated && !isAuthenticated) {
+      router.replace('/');
+    }
+  }, [isAuthenticated, isHydrated, router]);
+
   return (
     <Tabs
       screenOptions={{
@@ -26,8 +39,18 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => <Feather name="package" size={size} color={color} />,
         }}
       />
-        <Tabs.Screen
+      <Tabs.Screen
         name="index"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, size }) => <Feather name="user" size={size} color={color} />,
+        }}
       />
     </Tabs>
   );

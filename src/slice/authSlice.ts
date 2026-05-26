@@ -137,7 +137,7 @@ export const logoutUser = createAsyncThunk<
   LogoutResponse,
   void,
   { rejectValue: string }
->('auth/logout', async (_, { rejectWithValue }) => {
+>('auth/logout', async () => {
   try {
     const response = await api.post<LogoutResponse>('/logout');
 
@@ -145,9 +145,13 @@ export const logoutUser = createAsyncThunk<
 
     return response.data;
   } catch (error) {
-    return rejectWithValue(
-      extractApiErrorMessage(error, 'Logout gagal. Silakan coba lagi.')
-    );
+    await clearAuthSession();
+
+    return {
+      status: true,
+      message: 'Logout berhasil.',
+      data: null,
+    };
   }
 });
 
