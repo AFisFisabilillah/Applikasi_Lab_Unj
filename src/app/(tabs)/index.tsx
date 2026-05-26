@@ -1,13 +1,17 @@
-import {ScrollView, View, Text} from "react-native";
+import {ScrollView, Text, View} from "react-native";
 
-export default function Home(){
-    return (
+const Beranda = ()=>{
+    return(
         <>
             <ScrollView>
                 <View>
-                    <Text>Home</Text>
+                    <Text>
+                        Inin beranda
+                    </Text>
                 </View>
             </ScrollView>
         </>
     )
 }
+
+export default Beranda;
