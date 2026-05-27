@@ -40,6 +40,13 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="scan"
+        options={{
+          title: 'Scan',
+          tabBarIcon: ({ color, size }) => <Feather name="camera" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="index"
         options={{
           href: null,
