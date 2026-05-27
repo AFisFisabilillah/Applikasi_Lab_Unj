@@ -40,6 +40,13 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="pinjam"
+        options={{
+          title: 'Pinjam',
+          tabBarIcon: ({ color, size }) => <Feather name="clipboard" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="scan"
         options={{
           title: 'Scan',
