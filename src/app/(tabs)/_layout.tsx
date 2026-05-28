@@ -32,6 +32,13 @@ export default function TabsLayout() {
         },
       }}
     >
+        <Tabs.Screen
+            name="index"
+            options={{
+                title: 'Home',
+                tabBarIcon: ({ color, size }) => <Feather name="home" size={size} color={color} />,
+            }}
+        />
       <Tabs.Screen
         name="barang"
         options={{
@@ -53,12 +60,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => <Feather name="camera" size={size} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="index"
-        options={{
-          href: null,
-        }}
-      />
+
       <Tabs.Screen
         name="profile"
         options={{
