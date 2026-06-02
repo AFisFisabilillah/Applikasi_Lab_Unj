@@ -31,14 +31,17 @@ function BarangCardComponent({ barang, onPress }: BarangCardProps) {
           {barang.gambar_url ? (
               <Image
                   source={{ uri: barang.gambar_url }}
-                  className="h-full w-full"
+                  style={{ width: '100%', height: '100%' }}
                   contentFit="cover"
+                  cachePolicy="memory-disk"
+                  transition={120}
               />
           ) : (
               <View className="flex-1 items-center justify-center">
                 <Feather name="package" size={32} color="#9ca3af" />
               </View>
           )}
+
           <View className={`absolute right-2 top-2 rounded-full px-2.5 py-0.5 ${avail.bg}`}>
             <Text className={`text-[10px] font-semibold ${avail.text}`}>
               {avail.label}

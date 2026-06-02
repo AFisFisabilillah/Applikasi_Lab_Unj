@@ -344,7 +344,13 @@ const AvailableCard = memo(function AvailableCard({
     <View className="mr-3 w-64 overflow-hidden rounded-xl border border-border/60 bg-white shadow-sm">
       <View className="relative h-32 bg-surface-muted">
         {imageSource ? (
-          <Image source={typeof imageSource === 'string' ? { uri: imageSource } : imageSource} className="h-full w-full" contentFit="cover" />
+          <Image
+            source={typeof imageSource === 'string' ? { uri: imageSource } : imageSource}
+            style={{ width: '100%', height: '100%' }}
+            contentFit="cover"
+            cachePolicy="memory-disk"
+            transition={120}
+          />
         ) : (
           <View className="h-full w-full items-center justify-center">
             <Feather name="package" size={24} color="#7c8b81" />
@@ -514,7 +520,11 @@ export default function DashboardScreen() {
   const headerComponent = useMemo(() => {
     return (
       <View className="relative">
-        <Image source={STITCH_LOGO_BG} className="absolute inset-0 opacity-[0.02]" contentFit="cover" />
+        <Image
+          source={STITCH_LOGO_BG}
+          style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.02 }}
+          contentFit="cover"
+        />
 
         <HeaderBar userName={userName} />
 

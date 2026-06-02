@@ -87,7 +87,13 @@ function LoanCard({ item }: { item: Pinjam }) {
       <View className="flex-row gap-4">
         <View className="h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-surface-muted">
           {item.barang.gambar_url ? (
-            <Image source={{ uri: item.barang.gambar_url }} className="h-full w-full" contentFit="cover" />
+            <Image
+              source={{ uri: item.barang.gambar_url }}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              transition={120}
+            />
           ) : (
             <Feather name="package" size={22} color="#8c9a91" />
           )}
