@@ -56,7 +56,11 @@ export default function BarangScreen() {
   }, [isLoading, isLoadingMore, loadBarang, meta, searchQuery]);
 
   const renderItem = useCallback(({ item }: { item: (typeof items)[number] }) => {
-    return <BarangCard barang={item} onPress={() => setSelectedBarang(item)} />;
+    return (
+      <View style={{ width: '48%' }}>
+        <BarangCard barang={item} onPress={() => setSelectedBarang(item)} />
+      </View>
+    );
   }, []);
 
   const listEmptyComponent = useMemo(() => {
@@ -81,11 +85,13 @@ export default function BarangScreen() {
     <SafeAreaView edges={['top']} className="flex-1 bg-background">
       <FlatList
         data={items}
+        numColumns={2}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.35}
-        className={"px-1"}
+        className="px-1"
+        columnWrapperStyle={{ gap: 12 }}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}
         ListHeaderComponent={
           <View className="px-5 pb-4 pt-3">
@@ -143,7 +149,7 @@ export default function BarangScreen() {
         contentContainerStyle={{
           paddingBottom: 24,
           flexGrow: items.length === 0 ? 1 : undefined,
-          paddingHorizontal:4
+          paddingHorizontal: 4,
         }}
         ItemSeparatorComponent={() => <View className="h-3" />}
         showsVerticalScrollIndicator={false}
