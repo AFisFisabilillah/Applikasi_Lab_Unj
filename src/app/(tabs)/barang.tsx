@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, RefreshControl, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 
 import { BarangCard } from '@/components/BarangCard';
@@ -10,10 +10,12 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import type { Barang } from '@/types/Barang';
 
 const INITIAL_PAGE_SIZE = 10;
+const TAB_BAR_SPACING = 108;
 
 export default function BarangScreen() {
   const dispatch = useAppDispatch();
   const { items, meta, isLoading, isLoadingMore, error } = useAppSelector((state) => state.barang);
+  const insets = useSafeAreaInsets();
 
   const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -147,7 +149,7 @@ export default function BarangScreen() {
           )
         }
         contentContainerStyle={{
-          paddingBottom: 24,
+          paddingBottom: TAB_BAR_SPACING + insets.bottom,
           flexGrow: items.length === 0 ? 1 : undefined,
           paddingHorizontal: 4,
         }}

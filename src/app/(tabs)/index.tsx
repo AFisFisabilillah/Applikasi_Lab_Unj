@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
@@ -26,6 +26,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat('id-ID', {
 const STITCH_LOGO_BG = require('../../../assets/stitch/unj-logo-bg.png');
 const STITCH_PROJECTOR = require('../../../assets/stitch/proyektor-epson.png');
 const STITCH_HDMI = require('../../../assets/stitch/kabel-hdmi.png');
+const TAB_BAR_SPACING = 108;
 
 const STYLES = StyleSheet.create({
   contentContainer: {
@@ -192,7 +193,7 @@ const ProfileCard = memo(function ProfileCard({
     <View className="mx-5 rounded-xl border border-border/60 bg-white px-4 py-4 shadow-sm">
       <View className="flex-row items-start justify-between gap-3">
         <View className="flex-1">
-          <Text className="text-[24px] font-semibold leading-8 text-text">Halo, {userName} 👋</Text>
+          <Text className="text-[24px] font-semibold leading-8 text-text">Halo, {userName} </Text>
           <Text className="mt-1 text-[14px] leading-5 text-text-muted">
             {typeUser} • {fakultas}
           </Text>
@@ -433,6 +434,7 @@ function historyKeyExtractor(item: DashboardLoanItem) {
 export default function DashboardScreen() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const user = useAppSelector((state) => state.auth.user);
   const dashboardData = useAppSelector((state) => state.dashboard.data);
@@ -608,9 +610,13 @@ export default function DashboardScreen() {
     userType,
   ]);
 
-  const contentContainerStyle = recentLoans.length > 0
-    ? STYLES.contentContainer
-    : STYLES.contentContainerEmpty;
+  const contentContainerStyle = useMemo(
+    () => ({
+      ...(recentLoans.length > 0 ? STYLES.contentContainer : STYLES.contentContainerEmpty),
+      paddingBottom: TAB_BAR_SPACING + insets.bottom,
+    }),
+    [insets.bottom, recentLoans.length]
+  );
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-background">
