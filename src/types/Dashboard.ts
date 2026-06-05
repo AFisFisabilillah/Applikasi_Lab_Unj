@@ -22,6 +22,7 @@ export interface DashboardBarangTersediaItem {
   nama: string;
   jumlah: number;
   created_at: string;
+  gambar_url:string;
   updated_at: string;
   gambar: string | null;
   deskripsi: string | null;

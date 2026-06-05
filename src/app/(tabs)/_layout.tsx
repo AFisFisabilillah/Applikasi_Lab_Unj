@@ -46,6 +46,13 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => <Feather name="package" size={size} color={color} />,
         }}
       />
+        <Tabs.Screen
+            name="scan"
+            options={{
+                title: 'Scan',
+                tabBarIcon: ({ color, size }) => <Feather name="camera" size={size} color={color} />,
+            }}
+        />
       <Tabs.Screen
         name="pinjam"
         options={{
@@ -53,14 +60,6 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => <Feather name="clipboard" size={size} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="scan"
-        options={{
-          title: 'Scan',
-          tabBarIcon: ({ color, size }) => <Feather name="camera" size={size} color={color} />,
-        }}
-      />
-
       <Tabs.Screen
         name="profile"
         options={{

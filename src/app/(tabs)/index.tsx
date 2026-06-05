@@ -11,6 +11,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import type { ImageSource } from 'expo-image';
 import { useRouter } from 'expo-router';
 
 import { clearDashboardError, fetchDashboard } from '@/slice/dashboardSlice';
@@ -155,21 +156,21 @@ type HeaderBarProps = {
 };
 
 const HeaderBar = memo(function HeaderBar({ userName }: HeaderBarProps) {
-  const initial = userName.trim().charAt(0).toUpperCase() || 'U';
 
   return (
     <View className="flex-row items-center justify-between px-5 py-4">
       <View className="flex-row items-center gap-3">
         <Pressable className="h-9 w-9 items-center justify-center rounded-full">
-          <Feather name="menu" size={18} color="#3f4949" />
+          <Image source={STITCH_LOGO_BG} style={{
+            width:28,
+            height:28
+          }}/>
         </Pressable>
 
-        <Text className="text-[20px] font-bold text-primary">UNJ Lab Inventory</Text>
+        <Text className="text-[20px] font-bold text-primary">UNJ Lab </Text>
       </View>
 
-      <View className="h-8 w-8 items-center justify-center rounded-full border border-border bg-surface-muted">
-        <Text className="text-[11px] font-semibold text-primary">{initial}</Text>
-      </View>
+
     </View>
   );
 });
@@ -332,7 +333,7 @@ const ActiveLoanCard = memo(function ActiveLoanCard({ item }: ActiveLoanCardProp
 
 type AvailableCardProps = {
   item: DashboardBarangTersediaItem;
-  imageSource: string | number | null;
+  imageSource: object | null;
   onPress: () => void;
 };
 
@@ -342,11 +343,12 @@ const AvailableCard = memo(function AvailableCard({
   onPress,
 }: AvailableCardProps) {
   return (
+
     <View className="mr-3 w-64 overflow-hidden rounded-xl border border-border/60 bg-white shadow-sm">
       <View className="relative h-32 bg-surface-muted">
         {imageSource ? (
           <Image
-            source={typeof imageSource === 'string' ? { uri: imageSource } : imageSource}
+            source={imageSource}
             style={{ width: '100%', height: '100%' }}
             contentFit="cover"
             cachePolicy="memory-disk"
@@ -389,7 +391,7 @@ type HistoryItemProps = {
 const HistoryItem = memo(function HistoryItem({ item }: HistoryItemProps) {
   const tone = getStatusTone(item.status);
   const icon = getLoanIcon(item.nama_barang);
-
+  console.log(item.nama_barang)
   return (
     <View className="flex-row items-center justify-between px-4 py-4">
       <View className="flex-1 flex-row items-center gap-3">
@@ -501,11 +503,7 @@ export default function DashboardScreen() {
 
   const renderAvailableItem = useCallback(
     ({ item, index }: { item: DashboardBarangTersediaItem; index: number }) => {
-      const imageSource =
-        item.gambar && process.env.EXPO_PUBLIC_API_URL
-          ? `${process.env.EXPO_PUBLIC_API_URL}/storage/${item.gambar}`
-          : AVAILABLE_IMAGE_FALLBACKS[index] ?? null;
-
+      const imageSource = {uri:item?.gambar_url}
       return <AvailableCard item={item} imageSource={imageSource} onPress={handleBarangPress} />;
     },
     [handleBarangPress]
