@@ -17,6 +17,7 @@ export default function BarangScreen() {
   const { items, meta, isLoading, isLoadingMore, error } = useAppSelector((state) => state.barang);
   const insets = useSafeAreaInsets();
 
+  const [isScrolled, setIsScrolled] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBarang, setSelectedBarang] = useState<Barang | null>(null);
@@ -59,7 +60,7 @@ export default function BarangScreen() {
 
   const renderItem = useCallback(({ item }: { item: (typeof items)[number] }) => {
     return (
-      <View style={{ width: '48%' }}>
+      <View style={{ flex:1 }}>
         <BarangCard barang={item} onPress={() => setSelectedBarang(item)} />
       </View>
     );
@@ -85,6 +86,54 @@ export default function BarangScreen() {
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-background">
+      <View
+          style={{
+            paddingHorizontal: 20,
+            paddingTop: 12,
+            paddingBottom: 12,
+            backgroundColor: 'white', // atau token bg-background kamu
+            borderBottomWidth: isScrolled ? 1 : 0,
+            borderBottomColor: isScrolled ? '#e5e7eb' : 'transparent',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: isScrolled ? 2 : 0 },
+            shadowOpacity: isScrolled ? 0.06 : 0,
+            shadowRadius: 8,
+            elevation: isScrolled ? 3 : 0,
+          }}
+      >
+        {/* Judul — sembunyikan saat scroll */}
+        {!isScrolled && (
+            <View className="mb-3">
+              <Text className="text-[24px] font-bold text-text">Daftar Barang</Text>
+              <Text className="text-[13px] leading-5 text-text-muted">
+                Cari alat laboratorium yang tersedia untuk diajukan peminjaman.
+              </Text>
+            </View>
+        )}
+
+        {/* Search bar */}
+        <View className="flex-row items-center rounded-2xl border border-border bg-surface px-4 py-3">
+          <Feather name="search" size={18} color="#7a8a80" />
+          <TextInput
+              value={searchInput}
+              onChangeText={setSearchInput}
+              placeholder="Cari nama atau kode barang"
+              placeholderTextColor="#aab4ad"
+              autoCapitalize="characters"
+              className="ml-3 flex-1 p-0 text-[14px] text-text"
+              returnKeyType="search"
+          />
+          {searchInput.length > 0 && (
+              <Pressable onPress={() => setSearchInput('')} hitSlop={10}>
+                <Feather name="x-circle" size={18} color="#7a8a80" />
+              </Pressable>
+          )}
+        </View>
+
+        <Text className="mt-2 text-[12px] font-medium text-text-muted">
+          {meta?.total ?? items.length} barang
+        </Text>
+      </View>
       <FlatList
         data={items}
         numColumns={2}
@@ -92,52 +141,11 @@ export default function BarangScreen() {
         renderItem={renderItem}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.35}
-        className="px-1"
-        columnWrapperStyle={{ gap: 12 }}
+        className=""
+        onScroll={(e) => setIsScrolled(e.nativeEvent.contentOffset.y > 10)}
+        columnWrapperStyle={{ gap: 5 }}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}
-        ListHeaderComponent={
-          <View className="px-5 pb-4 pt-3">
-            <View className="gap-1">
-              <Text className="text-[24px] font-bold text-text">Daftar Barang</Text>
-              <Text className="text-[13px] leading-5 text-text-muted">
-                Cari alat laboratorium yang tersedia untuk diajukan peminjaman.
-              </Text>
-            </View>
 
-            <View className="mt-4 flex-row items-center rounded-2xl border border-border bg-surface px-4 py-3">
-              <Feather name="search" size={18} color="#7a8a80" />
-              <TextInput
-                value={searchInput}
-                onChangeText={setSearchInput}
-                placeholder="Cari nama atau kode barang"
-                placeholderTextColor="#aab4ad"
-                autoCapitalize="characters"
-                className="ml-3 flex-1 p-0 text-[14px] text-text"
-                returnKeyType="search"
-              />
-              {searchInput.length > 0 ? (
-                <Pressable onPress={() => setSearchInput('')} hitSlop={10}>
-                  <Feather name="x-circle" size={18} color="#7a8a80" />
-                </Pressable>
-              ) : null}
-            </View>
-
-            <View className="mt-4 flex-row items-center justify-between">
-              <Text className="text-[12px] font-medium text-text-muted">
-                {meta?.total ?? items.length} barang
-              </Text>
-              <Text className="text-[12px] font-medium text-text-muted">
-                Muat {INITIAL_PAGE_SIZE} per halaman
-              </Text>
-            </View>
-
-            {error ? (
-              <View className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
-                <Text className="text-[13px] leading-5 text-rose-700">{error}</Text>
-              </View>
-            ) : null}
-          </View>
-        }
         ListEmptyComponent={listEmptyComponent}
         ListFooterComponent={
           isLoadingMore ? (
@@ -153,7 +161,7 @@ export default function BarangScreen() {
           flexGrow: items.length === 0 ? 1 : undefined,
           paddingHorizontal: 4,
         }}
-        ItemSeparatorComponent={() => <View className="h-3" />}
+        ItemSeparatorComponent={() => <View className="h-1.5" />}
         showsVerticalScrollIndicator={false}
       />
 

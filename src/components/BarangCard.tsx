@@ -25,7 +25,7 @@ function BarangCardComponent({ barang, onPress }: BarangCardProps) {
   return (
       <Pressable
           onPress={onPress}
-          className="overflow-hidden rounded-2xl border border-border/60 bg-white active:opacity-90"
+          className="overflow-hidden rounded-md border border-border/60 bg-white active:opacity-90"
       >
         <View className="h-32 w-full bg-surface-muted">
           {barang.gambar_url ? (
