@@ -160,6 +160,7 @@ export default function BarangScreen() {
           paddingBottom: TAB_BAR_SPACING + insets.bottom,
           flexGrow: items.length === 0 ? 1 : undefined,
           paddingHorizontal: 4,
+          paddingTop: 4,
         }}
         ItemSeparatorComponent={() => <View className="h-1.5" />}
         showsVerticalScrollIndicator={false}
