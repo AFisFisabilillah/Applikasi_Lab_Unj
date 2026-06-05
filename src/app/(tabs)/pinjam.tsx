@@ -69,7 +69,7 @@ function SummaryCard({
   value: number;
 }) {
   return (
-    <View className="flex-1 rounded-2xl border border-border/70 bg-surface px-4 py-4">
+    <View className="flex-1 rounded-lg border border-border/70 bg-surface px-4 py-4">
       <View className="h-10 w-10 items-center justify-center rounded-full bg-primary/10">
         <Feather name={icon} size={18} color="#006569" />
       </View>
@@ -83,7 +83,7 @@ function LoanCard({ item }: { item: Pinjam }) {
   const tone = getStatusTone(item.status);
 
   return (
-    <View className="rounded-[22px] border border-border/70 bg-surface px-4 py-4 shadow-sm">
+    <View className="rounded-lg border border-border/70 bg-surface px-4 py-4 shadow-sm">
       <View className="flex-row gap-4">
         <View className="h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-surface-muted">
           {item.barang.gambar_url ? (
@@ -229,8 +229,7 @@ export default function PinjamScreen() {
                 </Text>
               </View>
 
-              <View className="rounded-2xl bg-primary px-4 py-3">
-                <Text className="text-[11px] text-white/80">Total</Text>
+              <View className="rounded-lg bg-primary px-4 py-3">
                 <Text className="text-[20px] font-bold text-white">{summary.total}</Text>
               </View>
             </View>
@@ -241,7 +240,7 @@ export default function PinjamScreen() {
             </View>
 
             {error ? (
-              <View className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
+              <View className="mt-4 rounded-lgl border border-rose-200 bg-rose-50 px-4 py-3">
                 <Text className="text-[13px] leading-5 text-rose-700">{error}</Text>
               </View>
             ) : null}

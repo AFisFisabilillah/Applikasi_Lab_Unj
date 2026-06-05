@@ -204,7 +204,7 @@ export default function ScanScreen() {
       </View>
 
       <View className="px-5 pb-6">
-        <View className="overflow-hidden rounded-[28px] border border-border/70 bg-surface shadow-sm">
+        <View className="overflow-hidden rounded-lg border border-border/70 bg-surface shadow-sm">
           <View style={styles.cameraContainer}>
             {cameraGranted ? (
               <CameraView
