@@ -169,9 +169,7 @@ export default function LoginScreen() {
                         <Text className="text-[15px] font-semibold text-primary-foreground">
                             {isLoading && currentAction === 'login' ? 'Memproses...' : 'Login'}
                         </Text>
-                        {!(isLoading && currentAction === 'login') ? (
-                            <Text className="text-[16px] font-semibold text-primary-foreground">→</Text>
-                        ) : null}
+
                     </View>
                 </Pressable>
 

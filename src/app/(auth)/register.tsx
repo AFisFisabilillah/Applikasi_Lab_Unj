@@ -322,9 +322,7 @@ export default function RegisterScreen() {
                         <Text className="text-[15px] font-semibold text-primary-foreground">
                             {isLoading && currentAction === 'register' ? 'Memproses...' : 'Daftar'}
                         </Text>
-                        {!(isLoading && currentAction === 'register') ? (
-                            <Text className="text-[16px] font-semibold text-primary-foreground">→</Text>
-                        ) : null}
+                      
                     </View>
                 </Pressable>
 
