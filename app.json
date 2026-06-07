@@ -4,21 +4,25 @@
     "slug": "labunj",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo_unj.svg",
+    "icon": "./assets/images/unj-logo.png",
     "scheme": "labunj",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "id.web.labpteunj.labunj"
     },
     "android": {
+      "package": "id.web.labpteunj.labunj",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/logo_unj.svg",
-        "backgroundImage": "./assets/images/logo_unj.svg",
-        "monochromeImage": "./assets/images/logo_unj.svg"
+        "foregroundImage": "./assets/images/unj-logo.png",
+        "backgroundImage": "./assets/images/unj-logo.png",
+        "monochromeImage": "./assets/images/unj-logo.png"
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ]
@@ -40,7 +44,7 @@
         {
           "backgroundColor": "#208AEF",
           "android": {
-            "image": "./assets/images/logo_unj.svg",
+            "image": "./assets/images/unj-logo.png",
             "imageWidth": 76
           }
         }
@@ -56,6 +60,12 @@
         "projectId": "a0796904-c5d4-41b7-80b3-22e1ede4b2a9"
       }
     },
-    "owner": "afisabillah"
+    "owner": "afisabillah",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a0796904-c5d4-41b7-80b3-22e1ede4b2a9"
+    }
   }
 }
