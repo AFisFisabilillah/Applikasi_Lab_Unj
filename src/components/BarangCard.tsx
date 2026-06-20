@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Image } from 'expo-image';
 import { Pressable, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -6,7 +6,7 @@ import type { Barang } from '@/types/Barang';
 
 type BarangCardProps = {
   barang: Barang;
-  onPress?: () => void;
+  onPress?: (barang: Barang) => void;
 };
 
 function getStockLabel(jumlah: number) {
@@ -21,10 +21,13 @@ function BarangCardComponent({ barang, onPress }: BarangCardProps) {
       : { bg: 'bg-rose-100', text: 'text-rose-700', label: 'Dipinjam' };
 
   const stock = getStockLabel(barang.jumlah);
+  const handlePress = useCallback(() => {
+    onPress?.(barang);
+  }, [barang, onPress]);
 
   return (
       <Pressable
-          onPress={onPress}
+          onPress={handlePress}
           className="overflow-hidden rounded-md border border-border/60 bg-white active:opacity-90"
       >
         <View className="h-32 w-full bg-surface-muted">

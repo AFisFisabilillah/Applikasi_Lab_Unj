@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Platform, Pressable, RefreshControl, Text, TextInput, View } from 'react-native';
+import {
+    ActivityIndicator,
+    FlatList,
+    type NativeScrollEvent,
+    type NativeSyntheticEvent,
+    Platform,
+    Pressable,
+    RefreshControl,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 
@@ -11,10 +22,13 @@ import type { Barang } from '@/types/Barang';
 
 const INITIAL_PAGE_SIZE = 20;
 const TAB_BAR_SPACING = 108;
+const CARD_COLUMN_STYLE = { flex: 1 };
+const COLUMN_WRAPPER_STYLE = { gap: 5 };
+const ITEM_SEPARATOR = () => <View className="h-1.5" />;
 
 export default function BarangScreen() {
     const dispatch = useAppDispatch();
-    const { items, meta, isLoading, isLoadingMore, error } = useAppSelector((state) => state.barang);
+    const { items, meta, isLoading, isLoadingMore } = useAppSelector((state) => state.barang);
     const insets = useSafeAreaInsets();
 
     const [isScrolled, setIsScrolled] = useState(false);
@@ -27,6 +41,7 @@ export default function BarangScreen() {
     // tidak akan lolos cek ini meski Redux state belum sempat update.
     const isFetchingNextPageRef = useRef(false);
     const lastRequestedPageRef = useRef(0);
+    const isScrolledRef = useRef(false);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -87,13 +102,32 @@ export default function BarangScreen() {
         loadBarang(nextPage, searchQuery, INITIAL_PAGE_SIZE);
     }, [isLoading, loadBarang, meta, searchQuery]);
 
+    const handleSelectBarang = useCallback((barang: Barang) => {
+        setSelectedBarang(barang);
+    }, []);
+
+    const handleCloseDetail = useCallback(() => {
+        setSelectedBarang(null);
+    }, []);
+
+    const handleScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const nextIsScrolled = e.nativeEvent.contentOffset.y > 10;
+
+        if (isScrolledRef.current === nextIsScrolled) {
+            return;
+        }
+
+        isScrolledRef.current = nextIsScrolled;
+        setIsScrolled(nextIsScrolled);
+    }, []);
+
     const renderItem = useCallback(({ item }: { item: (typeof items)[number] }) => {
         return (
-            <View style={{ flex: 1 }}>
-                <BarangCard barang={item} onPress={() => setSelectedBarang(item)} />
+            <View style={CARD_COLUMN_STYLE}>
+                <BarangCard barang={item} onPress={handleSelectBarang} />
             </View>
         );
-    }, []);
+    }, [handleSelectBarang]);
 
     const listEmptyComponent = useMemo(() => {
         if (isLoading) {
@@ -169,9 +203,9 @@ export default function BarangScreen() {
                 renderItem={renderItem}
                 onEndReached={handleLoadMore}
                 onEndReachedThreshold={0.5}
-                onScroll={(e) => setIsScrolled(e.nativeEvent.contentOffset.y > 10)}
+                onScroll={handleScroll}
                 scrollEventThrottle={16}
-                columnWrapperStyle={{ gap: 5 }}
+                columnWrapperStyle={COLUMN_WRAPPER_STYLE}
                 refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}
                 ListEmptyComponent={listEmptyComponent}
                 ListFooterComponent={
@@ -189,7 +223,7 @@ export default function BarangScreen() {
                     paddingHorizontal: 4,
                     paddingTop: 4,
                 }}
-                ItemSeparatorComponent={() => <View className="h-1.5" />}
+                ItemSeparatorComponent={ITEM_SEPARATOR}
                 showsVerticalScrollIndicator={false}
                 // --- props tambahan supaya infinite scroll lebih smooth ---
                 initialNumToRender={10}
@@ -208,7 +242,7 @@ export default function BarangScreen() {
             <BarangDetailSheet
                 barang={selectedBarang}
                 visible={selectedBarang !== null}
-                onClose={() => setSelectedBarang(null)}
+                onClose={handleCloseDetail}
             />
         </SafeAreaView>
     );
