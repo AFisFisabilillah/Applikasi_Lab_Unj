@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-import { clearAuthError, logoutUser } from '@/slice/authSlice';
+import { clearAuthError, logoutUser, resetAuthState } from '@/slice/authSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 function ProfileRow({
@@ -35,15 +35,10 @@ function ProfileRow({
 export default function ProfileScreen() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isHydrated, isLoading, currentAction, error } = useAppSelector(
+  const { user, isLoading, currentAction, error } = useAppSelector(
     (state) => state.auth
   );
-
-  useEffect(() => {
-    if (isHydrated && !isAuthenticated) {
-      router.replace('/');
-    }
-  }, [isAuthenticated, isHydrated, router]);
+  const createdAt = user?.created_at;
 
   const initials = useMemo(() => {
     const source = user?.nama?.trim();
@@ -59,16 +54,23 @@ export default function ProfileScreen() {
   }, [user?.nama]);
 
   const joinedDate = useMemo(() => {
-    if (!user?.created_at) {
+    if (!createdAt) {
       return '-';
     }
 
-    return new Date(user.created_at).toLocaleDateString('id-ID', {
+    return new Date(createdAt).toLocaleDateString('id-ID', {
       day: '2-digit',
       month: 'long',
       year: 'numeric',
     });
-  }, [user?.created_at]);
+  }, [createdAt]);
+
+  const handleLogout = useCallback(() => {
+    dispatch(clearAuthError());
+    dispatch(resetAuthState());
+    router.replace('/');
+    dispatch(logoutUser());
+  }, [dispatch, router]);
 
   const statusLabel = user?.status?.trim() || 'Aktif';
   const userTypeLabel = user?.type_user?.trim() || 'Pengguna';
@@ -135,10 +137,7 @@ export default function ProfileScreen() {
         ) : null}
 
         <Pressable
-          onPress={() => {
-            dispatch(clearAuthError());
-            dispatch(logoutUser());
-          }}
+          onPress={handleLogout}
           disabled={isLoading && currentAction === 'logout'}
           className="mt-6 h-12 flex-row items-center justify-center rounded-2xl bg-primary active:opacity-90"
         >

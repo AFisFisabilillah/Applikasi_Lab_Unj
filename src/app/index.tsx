@@ -1,17 +1,23 @@
 import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
+import * as WebBrowser from 'expo-web-browser';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 
 import { useAppSelector } from '@/store/hooks';
 
-const LOGO_UNJ = require('../../assets/images/logo_unj.svg');
+const LOGO_UNJ = require('../../assets/images/logo_unj.png');
 const WELCOME_IMAGE = require('../../assets/welcome_image.svg');
+const ADMIN_ACCESS_URL = 'https://labpteunj.web.id/login-admin-menu';
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const { isAuthenticated, isHydrated } = useAppSelector((state) => state.auth);
+
+  const openAdminAccess = async () => {
+    await WebBrowser.openBrowserAsync(ADMIN_ACCESS_URL);
+  };
 
   useEffect(() => {
     if (isHydrated && isAuthenticated) {
@@ -39,7 +45,7 @@ export default function WelcomeScreen() {
               </Text>
 
               <Text className="mt-2 max-w-[340px] text-center text-[26px] font-bold leading-[33px] text-text">
-                Peminjaman Barang
+                Aplikasi Manajemen
                 <Text className={"text-primary ml-0.5"}>
                   Laboratorium
                 </Text>
@@ -83,6 +89,15 @@ export default function WelcomeScreen() {
                   </Text>
                 </Pressable>
               </Link>
+
+              <Pressable
+                  onPress={openAdminAccess}
+                  className="h-12 items-center justify-center rounded-xl border border-primary bg-white active:opacity-90"
+              >
+                <Text className="text-[15px] font-semibold text-primary">
+                  Akses Admin
+                </Text>
+              </Pressable>
             </View>
           </SafeAreaView>
         </View>

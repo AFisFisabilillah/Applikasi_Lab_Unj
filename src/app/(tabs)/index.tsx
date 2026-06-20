@@ -24,7 +24,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat('id-ID', {
   year: 'numeric',
 });
 
-const STITCH_LOGO_BG = require('../../../assets/stitch/unj-logo-bg.png');
+const STITCH_LOGO_BG = require('../../../assets/images/logo_unj.png');
 const STITCH_PROJECTOR = require('../../../assets/stitch/proyektor-epson.png');
 const STITCH_HDMI = require('../../../assets/stitch/kabel-hdmi.png');
 const TAB_BAR_SPACING = 108;
@@ -160,10 +160,10 @@ const HeaderBar = memo(function HeaderBar({ userName }: HeaderBarProps) {
   return (
     <View className="flex-row items-center justify-between px-5 py-4">
       <View className="flex-row items-center gap-3">
-        <Pressable className="h-9 w-9 items-center justify-center rounded-full">
+        <Pressable className="h-10 w-9 items-center justify-center rounded-full">
           <Image source={STITCH_LOGO_BG} style={{
             width:28,
-            height:28
+            height:32
           }}/>
         </Pressable>
 

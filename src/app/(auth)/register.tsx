@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {fakultasData} from "@/types/FakultasItem";
 import {Dropdown} from "react-native-element-dropdown";
 
-const LOGO_UNJ = require('../../../assets/images/logo_unj.svg');
+const LOGO_UNJ = require('../../../assets/images/logo_unj.png');
 
 type RegisterForm = {
     fullName: string;

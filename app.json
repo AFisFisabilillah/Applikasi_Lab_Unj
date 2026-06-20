@@ -4,7 +4,7 @@
     "slug": "labunj",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo_unj.svg",
+    "icon": "./assets/images/logo_unj.png",
     "scheme": "labunj",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -13,9 +13,9 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/logo_unj.svg",
-        "backgroundImage": "./assets/images/logo_unj.svg",
-        "monochromeImage": "./assets/images/logo_unj.svg"
+        "foregroundImage": "./assets/images/logo_unj.png",
+        "backgroundImage": "./assets/images/logo_unj.png",
+        "monochromeImage": "./assets/images/logo_unj.png"
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [
@@ -40,7 +40,7 @@
         {
           "backgroundColor": "#208AEF",
           "android": {
-            "image": "./assets/images/logo_unj.svg",
+            "image": "./assets/images/logo_unj.png",
             "imageWidth": 76
           }
         }

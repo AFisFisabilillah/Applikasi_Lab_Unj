@@ -36,9 +36,7 @@ export default function BarangScreen() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedBarang, setSelectedBarang] = useState<Barang | null>(null);
 
-    // Ref guard: di-set TRUE secara synchronous begitu fetch dimulai,
-    // jadi onEndReached yang terpanggil berkali-kali dalam waktu singkat
-    // tidak akan lolos cek ini meski Redux state belum sempat update.
+
     const isFetchingNextPageRef = useRef(false);
     const lastRequestedPageRef = useRef(0);
     const isScrolledRef = useRef(false);
@@ -59,14 +57,12 @@ export default function BarangScreen() {
     );
 
     useEffect(() => {
-        // reset guard setiap kali query berubah (halaman 1 dimuat ulang)
         isFetchingNextPageRef.current = false;
         lastRequestedPageRef.current = 0;
         loadBarang(1, searchQuery, INITIAL_PAGE_SIZE);
     }, [loadBarang, searchQuery]);
 
-    // Begitu isLoadingMore dari Redux benar2 false (fetch selesai/gagal),
-    // baru lepas guard supaya scroll selanjutnya bisa trigger load lagi.
+
     useEffect(() => {
         if (!isLoadingMore) {
             isFetchingNextPageRef.current = false;

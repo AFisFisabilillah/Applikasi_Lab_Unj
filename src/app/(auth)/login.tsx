@@ -8,7 +8,7 @@ import { InputField } from '@/components/InputField';
 import { clearAuthError, clearAuthMessage, loginUser } from '@/slice/authSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
-const LOGO_UNJ = require('../../../assets/images/logo_unj.svg');
+const LOGO_UNJ = require('../../../assets/images/logo_unj.png');
 
 type LoginForm = {
     identityNumber: string;

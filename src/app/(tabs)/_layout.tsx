@@ -1,22 +1,20 @@
-import { useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppSelector } from '@/store/hooks';
-import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function TabsLayout() {
-  const router = useRouter();
-    const insets = useSafeAreaInsets();
-    console.log()
+  const insets = useSafeAreaInsets();
   const { isAuthenticated, isHydrated } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (isHydrated && !isAuthenticated) {
-      router.replace('/');
-    }
-  }, [isAuthenticated, isHydrated, router]);
+  if (!isHydrated) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Tabs
@@ -27,7 +25,7 @@ export default function TabsLayout() {
         tabBarStyle: {
           height: 64,
           paddingTop: 8,
-            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
