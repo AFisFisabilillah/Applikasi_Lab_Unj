@@ -1,4 +1,4 @@
-import '@/global.css';
+    import '@/global.css';
 
 import { useEffect } from 'react';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';

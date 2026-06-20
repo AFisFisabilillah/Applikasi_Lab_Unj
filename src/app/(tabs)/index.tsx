@@ -117,25 +117,25 @@ function getStatusTone(status: string) {
 }
 
 function getLoanIcon(name: string) {
-  const normalized = name.toLowerCase();
+  const normalized = name?.toLowerCase();
 
-  if (normalized.includes('laptop')) {
+  if (normalized?.includes('laptop')) {
     return 'monitor';
   }
 
-  if (normalized.includes('kamera')) {
+  if (normalized?.includes('kamera')) {
     return 'camera';
   }
 
-  if (normalized.includes('microphone') || normalized.includes('mic')) {
+  if (normalized?.includes('microphone') || normalized?.includes('mic')) {
     return 'mic';
   }
 
-  if (normalized.includes('tripod')) {
+  if (normalized?.includes('tripod')) {
     return 'triangle';
   }
 
-  if (normalized.includes('proyektor')) {
+  if (normalized?.includes('proyektor')) {
     return 'video';
   }
 

@@ -4,9 +4,12 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { useAppSelector } from '@/store/hooks';
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function TabsLayout() {
   const router = useRouter();
+    const insets = useSafeAreaInsets();
+    console.log()
   const { isAuthenticated, isHydrated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
@@ -24,7 +27,7 @@ export default function TabsLayout() {
         tabBarStyle: {
           height: 64,
           paddingTop: 8,
-          paddingBottom: 8,
+            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
