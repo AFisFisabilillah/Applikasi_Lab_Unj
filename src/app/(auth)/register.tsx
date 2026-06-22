@@ -18,6 +18,7 @@ type RegisterForm = {
     fakultas: string | null;
     prodi: string | null;
     password: string;
+    confirmPassword: string;
 };
 
 type RegisterFormErrors = Partial<Record<keyof RegisterForm, string>> & {
@@ -37,6 +38,7 @@ const registerRequiredFieldErrorSchema = {
     fakultas: 'Fakultas wajib dipilih.',
     prodi: 'Program studi wajib dipilih.',
     password: 'Password wajib diisi.',
+    confirmPassword: 'Konfirmasi password wajib diisi.',
 } as const;
 
 const mockedDuplicateValues = {
@@ -51,6 +53,7 @@ const initialForm: RegisterForm = {
     fakultas: null,
     prodi: null,
     password: '',
+    confirmPassword: '',
 };
 
 export default function RegisterScreen() {
@@ -139,6 +142,15 @@ export default function RegisterScreen() {
         if (!values.password.trim()) {
             nextErrors.password = registerRequiredFieldErrorSchema.password;
             hasMissingRequiredField = true;
+        } else if (values.password.length < 6) {
+            nextErrors.password = 'Password minimal 6 karakter.';
+        }
+
+        if (!values.confirmPassword.trim()) {
+            nextErrors.confirmPassword = registerRequiredFieldErrorSchema.confirmPassword;
+            hasMissingRequiredField = true;
+        } else if (values.password && values.confirmPassword !== values.password) {
+            nextErrors.confirmPassword = 'Konfirmasi password tidak sama.';
         }
 
         if (Object.keys(nextErrors).length > 0) {
@@ -310,6 +322,16 @@ export default function RegisterScreen() {
                         icon={<AntDesign name="lock" size={20} color="rgba(0,0,0,.5)"/>}
                         secureTextEntry
                         error={errors.password}
+                    />
+
+                    <InputField
+                        label="Konfirmasi Password"
+                        placeholder="Ulangi password"
+                        value={form.confirmPassword}
+                        onChangeText={(value: string) => updateForm('confirmPassword', value)}
+                        icon={<AntDesign name="lock" size={20} color="rgba(0,0,0,.5)"/>}
+                        secureTextEntry
+                        error={errors.confirmPassword}
                     />
                 </View>
 
