@@ -57,7 +57,7 @@ export default function ScanScreen() {
   const resultSheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['52%'], []);
   const confirmSnapPoints = useMemo(() => ['92%'], []);
-  const resultSnapPoints = useMemo(() => ['48%'], []);
+  const resultSnapPoints = useMemo(() => ['70%'], []);
 
   useEffect(() => {
     if (!permission) {
@@ -258,30 +258,29 @@ export default function ScanScreen() {
           </View>
 
           <View className="px-4 py-4">
-            <View className="flex-row items-start justify-between gap-4">
-              <View className="flex-1">
-                <Text className="text-[11px] font-medium uppercase tracking-[0.5px] text-text-muted">
-                  {isBusy ? 'Memproses' : 'Hasil Scan'}
-                </Text>
-                <Text className="mt-1 text-[15px] leading-6 text-text">
-                  {isFetchingBarang
-                    ? `Mengambil detail barang untuk ${scannedValue ?? 'kode barang'}...`
-                    : isSubmitting
-                    ? `Memproses peminjaman untuk ${scannedValue ?? 'kode barang'}...`
-                    : scannedValue || 'Belum ada QR code yang terbaca.'}
-                </Text>
-              </View>
-
-              <Pressable
-                onPress={handleResetScan}
-                disabled={isBusy}
-                className={`rounded-full px-4 py-2 active:opacity-90 ${
-                  isBusy ? 'bg-primary/50' : 'bg-primary'
-                }`}
-              >
-                <Text className="text-[13px] font-semibold text-white">Scan Ulang</Text>
-              </Pressable>
+            <View>
+              <Text className="text-[11px] font-medium uppercase tracking-[0.5px] text-text-muted">
+                {isBusy ? 'Memproses' : 'Hasil Scan'}
+              </Text>
+              <Text className="mt-1 text-[15px] leading-6 text-text">
+                {isFetchingBarang
+                  ? `Mengambil detail barang untuk ${scannedValue ?? 'kode barang'}...`
+                  : isSubmitting
+                  ? `Memproses peminjaman untuk ${scannedValue ?? 'kode barang'}...`
+                  : scannedValue || 'Belum ada QR code yang terbaca.'}
+              </Text>
             </View>
+
+            <Pressable
+              onPress={handleResetScan}
+              disabled={isBusy}
+              className={`mt-4 h-14 w-full flex-row items-center justify-center rounded-lg active:opacity-90 ${
+                isBusy ? 'bg-primary/50' : 'bg-primary'
+              }`}
+            >
+              <Feather name="refresh-cw" size={18} color="#ffffff" />
+              <Text className="ml-2 text-[15px] font-semibold text-white">Scan Ulang</Text>
+            </Pressable>
           </View>
         </View>
       </View>

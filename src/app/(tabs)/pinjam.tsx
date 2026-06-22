@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -229,8 +229,24 @@ export default function PinjamScreen() {
                 </Text>
               </View>
 
-              <View className="rounded-lg bg-primary px-4 py-3">
-                <Text className="text-[20px] font-bold text-white">{summary.total}</Text>
+              <View className="flex-row items-center gap-2">
+                <Pressable
+                  onPress={handleRefresh}
+                  disabled={isLoading}
+                  className={`h-12 w-12 items-center justify-center rounded-lg border border-border/70 active:opacity-90 ${
+                    isLoading ? 'bg-surface-muted' : 'bg-surface'
+                  }`}
+                >
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color="#006569" />
+                  ) : (
+                    <Feather name="refresh-cw" size={18} color="#006569" />
+                  )}
+                </Pressable>
+
+                <View className="h-12 min-w-[48px] items-center justify-center rounded-lg bg-primary px-4">
+                  <Text className="text-[20px] font-bold text-white">{summary.total}</Text>
+                </View>
               </View>
             </View>
 
