@@ -167,10 +167,8 @@ const HeaderBar = memo(function HeaderBar({ userName }: HeaderBarProps) {
           }}/>
         </Pressable>
 
-        <Text className="text-[20px] font-bold text-primary">UNJ Lab </Text>
+        <Text className="text-[20px] font-bold text-primary">Labotarium Fakultas Teknik UNJ </Text>
       </View>
-
-
     </View>
   );
 });

@@ -9,7 +9,7 @@ import { useAppSelector } from '@/store/hooks';
 
 const LOGO_UNJ = require('../../assets/images/logo_unj.png');
 const WELCOME_IMAGE = require('../../assets/welcome_image.svg');
-const ADMIN_ACCESS_URL = 'https://labpteunj.web.id/login-admin-menu';
+const ADMIN_ACCESS_URL = 'https://labpteunj.online/login-admin-menu';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -45,8 +45,8 @@ export default function WelcomeScreen() {
               </Text>
 
               <Text className="mt-2 max-w-[340px] text-center text-[26px] font-bold leading-[33px] text-text">
-                Aplikasi Manajemen
-                <Text className={"text-primary ml-0.5"}>
+                Aplikasi Manajemen{" "}
+                <Text className={"text-primary"}>
                   Laboratorium
                 </Text>
               </Text>

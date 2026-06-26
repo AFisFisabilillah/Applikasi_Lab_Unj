@@ -1,9 +1,9 @@
-    import '@/global.css';
+import '@/global.css';
 
-import { useEffect } from 'react';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
@@ -23,10 +23,7 @@ function AppNavigator() {
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: colorScheme === 'dark' ? '#09110c' : '#eef2f0',
-          },
+          headerShown: false
         }}
       >
         <Stack.Screen name="index" />

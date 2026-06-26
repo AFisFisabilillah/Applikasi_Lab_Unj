@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "LabUnj",
+    "name": "LabFT UNJ",
     "slug": "labunj",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,16 +12,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/logo_unj.png",
-        "backgroundImage": "./assets/images/logo_unj.png",
-        "monochromeImage": "./assets/images/logo_unj.png"
+        "backgroundColor": "#006669",
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundImage": "./assets/images/icon.png",
+        "monochromeImage": "./assets/images/icon.png"
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.afisabillah.labunj"
     },
     "web": {
       "output": "static",
@@ -38,9 +39,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#006669",
           "android": {
-            "image": "./assets/images/logo_unj.png",
+            "image": "./assets/images/logo_app.png",
             "imageWidth": 76
           }
         }
